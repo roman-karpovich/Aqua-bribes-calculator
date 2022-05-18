@@ -1,0 +1,35 @@
+[flake8]
+max-line-length = 120
+ignore =
+    ; PyFlakes errors
+    ; F405 name may be undefined, or defined from star imports: module
+    F405
+    W503
+    Q0
+    C416
+    S105
+    S106
+    S703
+    S308
+    S101
+    E127
+    S321
+    C411
+    B009
+    S402
+    C402
+    P103
+    B306
+    C407
+    C401
+    F631
+    C812
+    B010
+    B007
+    C400
+    W291
+
+exclude =
+    */migrations
+    ./firebase
+    locustfile.py
