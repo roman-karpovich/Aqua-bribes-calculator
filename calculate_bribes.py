@@ -45,6 +45,13 @@ for vote in votes_data.json()['results']:
     bribes[vote['market_key']]['percentage'] = vote_value / total_voted
     bribes[vote['market_key']]['total_percentage'] = (vote_value + my_aqua) / (total_voted + my_aqua)
 
+# filter out pairs with no votes
+bribes = {
+    key: bribe
+    for key, bribe in bribes.items()
+    if bribe.get('percentage')
+}
+
 # get pair
 keys_data = requests.get(market_keys_url + '?' + '&'.join(f'account_id={key}' for key in bribes.keys()))
 for key in keys_data.json()['results']:
