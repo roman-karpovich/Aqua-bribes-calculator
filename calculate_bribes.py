@@ -40,7 +40,7 @@ for bribe in bribes_data.json()['results']:
 
 votes_data = requests.get(votes_url + '?' + '&'.join(f'market_key={key}' for key in bribes.keys()))
 for vote in votes_data.json()['results']:
-    vote_value = float(vote['votes_value'])
+    vote_value = float(vote['upvote_value'])
     bribes[vote['market_key']]['votes'] = vote_value
     bribes[vote['market_key']]['percentage'] = vote_value / total_voted
     bribes[vote['market_key']]['total_percentage'] = (vote_value + my_aqua) / (total_voted + my_aqua)
