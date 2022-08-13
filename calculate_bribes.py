@@ -40,10 +40,11 @@ for bribe in bribes_data.json()['results']:
 
 votes_data = requests.get(votes_url + '?' + '&'.join(f'market_key={key}' for key in bribes.keys()))
 for vote in votes_data.json()['results']:
-    vote_value = float(vote['upvote_value'])
-    bribes[vote['market_key']]['votes'] = vote_value
-    bribes[vote['market_key']]['percentage'] = vote_value / total_voted
-    bribes[vote['market_key']]['total_percentage'] = (vote_value + my_aqua) / (total_voted + my_aqua)
+    upvote_value = float(vote['upvote_value'])
+    downvote_value = float(vote['downvote_value'])
+    bribes[vote['market_key']]['votes'] = upvote_value
+    bribes[vote['market_key']]['percentage'] = max(upvote_value - downvote_value, 0) / total_voted
+    bribes[vote['market_key']]['total_percentage'] = max(upvote_value - downvote_value + my_aqua, 0) / (total_voted + my_aqua)
 
 # filter out pairs with no votes
 bribes = {
@@ -61,8 +62,11 @@ for key in keys_data.json()['results']:
 for bribe in bribes.values():
     if 'AQUA' not in bribe['pair']:
         continue
-    bribe['percentage'] *= 1.5
-    bribe['total_percentage'] *= 1.5
+
+    if bribe['percentage'] < 0.05/1.5:
+        bribe['percentage'] *= 1.5
+    if bribe['total_percentage'] < 0.05/1.5:
+        bribe['total_percentage'] *= 1.5
 
 for bribe in bribes.values():
     bribe['my_value'] = my_aqua / (bribe['votes'] + my_aqua) * bribe['daily_amount_aqua']
